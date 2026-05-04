@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Booking History</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<div class="navbar">
+
+    <div class="nav-left">
+        My Booking
+    </div>
+
+    <div class="nav-right">
+
+        <div class="dropdown">
+
+            <button class="dropbtn">
+                <span th:text="${session.user.name}"></span> ▼
+            </button>
+
+            <div class="dropdown-content">
+                <a href="/hotelsPage">Hotels</a>
+                <a href="/bookingHistory">My Bookings</a>
+                <a href="/logout">Logout</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="table-container">
+<div th:if="${success}" class="success-msg">
+    <p th:text="${success}"></p>
+<div class="booking-wrapper">
+
+    <h2>My Bookings</h2>
+	<div th:if="${#lists.isEmpty(bookings)}" class="error-msg">
+    	No bookings found
+	</div>
+    <table class="booking-table" th:if="${not #lists.isEmpty(bookings)}">
+
+        <tr>
+            <th>ID</th>
+            <th>Hotel</th>
+            <th>Room</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Total Price</th>
+            <th>Action</th>
+        </tr>
+
+        <tr th:each="b : ${bookings}">
+
+            <td th:text="${b.id}"></td>
+            <td th:text="${b.room.hotel.name}"></td>
+            <td th:text="${b.room != null ? b.room.roomType : 'N/A'}"></td>
+            <td th:text="${b.checkIn}"></td>
+            <td th:text="${b.checkOut}"></td>
+            <td th:text="${b.totalPrice}"></td>
+
+            <td>
+                <a th:href="@{/booking/cancelBooking(id=${b.id})}"
+   				class="btn"
+   				onclick="return confirm('Are you sure you want to cancel this booking?')">
+    			Cancel
+				</a>
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+</body>
+</html>

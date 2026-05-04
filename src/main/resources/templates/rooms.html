@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Rooms</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+
+    <div class="nav-left">
+        Hotel Booking
+    </div>
+
+    <div class="nav-right">
+
+        <!-- 👇 Username -->
+        <span class="user-name"
+              th:text="'Welcome, ' + ${session.user.name}">
+        </span>
+
+        <a href="/hotelsPage">Hotels</a>
+        <a href="/bookingHistory">My Bookings</a>
+        <a href="/logout">Logout</a>
+
+    </div>
+
+</div>
+
+<!-- Error Message -->
+<div th:if="${error}" class="error-msg">
+    <p th:text="${error}"></p>
+</div>
+<div class="main-container">
+
+    <!-- Filter -->
+    <div class="filter-box">
+        <form method="get" th:action="@{/roomsPage}">
+            <input type="hidden" name="hotelId" th:value="${hotelId}">
+
+            <label>
+                <input type="checkbox" name="availableOnly" value="true"
+                       th:checked="${availableOnly}">
+                Show only available rooms
+            </label>
+
+            <button type="submit">Apply</button>
+        </form>
+    </div>
+
+    <!-- Cards -->
+	<div class="cards-container">
+		
+	    <div class="card" th:each="room : ${rooms}">
+			<div class="slider">
+
+			    <div class="slides" th:if="${room.images != null}">
+			        <img th:each="img : ${room.images}"
+			             th:src="${img.imageUrl}"
+			             class="slide">
+			    </div>
+
+			    <!-- Buttons -->
+			    <button class="prev">&#10094;</button>
+			    <button class="next">&#10095;</button>
+
+			</div>
+	        <h3 th:text="${room.roomType}"></h3>
+
+	        <p>Price: ₹<span th:text="${room.price}"></span></p>
+
+	        <p>Available Rooms:
+	            <span th:text="${room.availableRooms}"></span>
+	        </p>
+
+	        <p th:class="${room.availableRooms > 0} ? 'available' : 'not-available'"
+	           th:text="${room.availableRooms > 0} ? 'Available' : 'Sold Out'">
+	        </p>
+
+	        <!-- 🔥 BUTTON MUST BE INSIDE -->
+	        <a class="btn"
+	           th:if="${room.availableRooms > 0}"
+	           th:href="@{/booking/paymentPage(roomId=${room.id})}">
+	           Book Now
+	        </a>
+
+	        <button class="btn-disabled"
+	                th:if="${room.availableRooms == 0}">
+	            Sold Out
+	        </button>
+
+	    </div>
+
+	</div>
+
+</div>
+<script>
+
+document.querySelectorAll(".slider").forEach(slider => {
+
+    let slides = slider.querySelectorAll(".slide");
+    let index = 0;
+
+    const showSlide = (i) => {
+        slides.forEach(s => s.style.display = "none");
+        slides[i].style.display = "block";
+    };
+
+    slider.querySelector(".next").addEventListener("click", () => {
+        index = (index + 1) % slides.length;
+        showSlide(index);
+    });
+
+    slider.querySelector(".prev").addEventListener("click", () => {
+        index = (index - 1 + slides.length) % slides.length;
+        showSlide(index);
+    });
+	setInterval(() => {
+	    index = (index + 1) % slides.length;
+	    showSlide(index);
+	}, 3000);
+
+});
+</script>
+</body>
+</html>

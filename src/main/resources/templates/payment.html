@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Payment</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="nav-left">Payment</div>
+</div>
+
+<div class="booking-container">
+
+    <h2>Confirm Payment</h2>
+
+    <p><b>Room:</b> <span th:text="${room.roomType}"></span></p>
+    <p><b>Price per day:</b> ₹<span th:text="${room.price}"></span></p>
+
+    <form action="/booking" method="post">
+
+        <!-- 🔥 IMPORTANT hidden fields -->
+        <input type="hidden" name="room.id" th:value="${room.id}">
+        <input type="hidden" name="user.id" th:value="${session.user.id}">
+        <input type="hidden" id="pricePerDay" th:value="${room.price}">
+
+        <label>Check In</label>
+        <input type="date" id="checkIn" name="checkIn" required>
+
+        <label>Check Out</label>
+        <input type="date" id="checkOut" name="checkOut" required>
+
+        <label>Total Price</label>
+        <input type="number" id="totalPrice" name="totalPrice" readonly>
+
+        <!-- 🔥 ADD THIS -->
+        <button type="submit">Pay & Book</button>
+
+    </form>
+
+    <p id="daysText"></p>
+
+</div>
+
+<script>
+
+function calculatePrice(){
+
+    let checkIn = document.getElementById("checkIn").value;
+    let checkOut = document.getElementById("checkOut").value;
+    let price = document.getElementById("pricePerDay").value;
+
+    if(checkIn && checkOut){
+
+        let date1 = new Date(checkIn);
+        let date2 = new Date(checkOut);
+
+        let diffTime = date2 - date1;
+        let days = diffTime / (1000 * 60 * 60 * 24);
+
+        if(days > 0){
+            document.getElementById("totalPrice").value = days * price;
+            document.getElementById("daysText").innerText = "Total days: " + days;
+        } else {
+            alert("Check-out must be after check-in");
+            document.getElementById("totalPrice").value = "";
+            document.getElementById("daysText").innerText = "";
+        }
+    }
+}
+
+document.getElementById("checkIn").addEventListener("change", calculatePrice);
+document.getElementById("checkOut").addEventListener("change", calculatePrice);
+
+</script>
+
+</body>
+</html>

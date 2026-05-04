@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="nav-left">Admin Panel</div>
+
+    <div class="nav-right">
+        <a href="/hotelsPage">Hotels</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="admin-container">
+
+    <h2>Add Hotel</h2>
+
+    <form th:action="@{/admin/addHotel}" method="post" enctype="multipart/form-data">>
+        <input name="name" placeholder="Hotel Name">
+        <input name="location" placeholder="Location">
+        <input name="description" placeholder="Description">
+		<input type="file" name="imageFile">
+        <button type="submit">Add Hotel</button>
+
+    </form>
+	
+
+    <hr>
+	<h2>Update Hotel Image</h2>
+
+	<form action="/admin/updateHotelImage" method="post" enctype="multipart/form-data">
+
+		<select name="hotelId">
+		    <option th:each="h : ${hotels}"
+		            th:value="${h.id}"
+		            th:text="${h.name}">
+		    </option>
+		</select>
+
+	    <input type="file" name="imageFile">
+
+	    <button type="submit">Update Image</button>
+
+	</form>
+    <h2>Add Room</h2>
+
+
+	<form action="/admin/addRoom" method="post" enctype="multipart/form-data">
+
+	    <input name="roomType" placeholder="Room Type">
+	    <input name="price" placeholder="Price">
+	    <input name="availableRooms" placeholder="Available Rooms">
+
+		<select name="hotel.id">
+			        <option value="">Select Hotel</option>
+			        <option th:each="h : ${hotels}"
+			                th:value="${h.id}"
+			                th:text="${h.name}">
+			        </option>
+			    </select>
+	    <!-- 🔥 FILE INPUT -->
+	    <input type="file" name="imageFile">
+
+	    <button type="submit">Add Room</button>
+	</form>
+	<h2>Update Room</h2>
+
+	<form action="/admin/updateRoom" method="post" enctype="multipart/form-data">
+
+	    <select name="roomId">
+	        <option th:each="r : ${rooms}"
+	                th:value="${r.id}"
+	                th:text="${r.roomType + ' - ' + r.hotel.name}">
+	        </option>
+	    </select>
+
+	    <input type="file" name="imageFile">
+
+	    <button type="submit">Update Room Image</button>
+
+	</form>
+	<h2>Upload Room Images</h2>
+
+	<form action="/admin/addRoomImages" method="post" enctype="multipart/form-data">
+
+	    <!-- HOTEL DROPDOWN -->
+	    <select id="hotelSelect">
+	        <option value="">Select Hotel</option>
+	        <option th:each="h : ${hotels}"
+	                th:value="${h.id}"
+	                th:text="${h.name}">
+	        </option>
+	    </select>
+
+	    <!-- ROOM DROPDOWN -->
+	    <select name="roomId" id="roomSelect">
+	        <option value="">Select Room</option>
+
+	        <!-- ALL ROOMS -->
+	        <option th:each="r : ${rooms}"
+	                th:value="${r.id}"
+	                th:text="${r.roomType + ' - ' + r.hotel.name}"
+	                th:data-hotel="${r.hotel.id}">
+	        </option>
+	    </select>
+
+	    <input type="file" name="files" multiple>
+
+	    <button>Upload Images</button>
+
+	</form>
+</div>
+
+</body>
+</html>
+<script>
+document.getElementById("hotelSelect").addEventListener("change", function(){
+
+    let hotelId = this.value;
+    let rooms = document.querySelectorAll("#roomSelect option");
+
+    rooms.forEach(option => {
+
+        if(option.value === "") return;
+
+        let roomHotelId = option.getAttribute("data-hotel");
+
+        if(roomHotelId === hotelId){
+            option.style.display = "block";
+        } else {
+            option.style.display = "none";
+        }
+    });
+
+});
+</script>

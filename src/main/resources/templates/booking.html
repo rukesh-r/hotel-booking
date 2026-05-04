@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<title>Booking</title>
+
+</head>
+
+<body>
+	<div class="navbar">
+	    <div class="nav-left">Hotel Booking</div>
+	    <div class="nav-right">
+	        <a href="/hotelsPage">Hotels</a>
+	        <a href="/bookingHistory">My Bookings</a>
+	        <a href="/logout">Logout</a>
+	    </div>
+	</div>
+
+	<div class="booking-container">
+
+	    <h2>Confirm Booking</h2>
+
+	    <form action="/booking" method="post">
+
+	        <input type="hidden" name="user.id" th:value="${userId}">
+	        <input type="hidden" name="room.id" th:value="${roomId}">
+
+	        <label>Check In</label>
+	        <input type="date" id="checkIn" name="checkIn">
+
+	        <label>Check Out</label>
+	        <input type="date" id="checkOut" name="checkOut">
+
+	        <label>Total Price</label>
+	        <input type="number" id="totalPrice" name="totalPrice" readonly>
+
+	        <button type="submit">Confirm Booking</button>
+
+	    </form>
+
+	</div>
+
+	<!-- hidden price -->
+	<input type="hidden" id="pricePerDay" th:value="${price}">
+
+</body>
+
+</html>
+
+<script>
+
+function calculatePrice(){
+
+    let checkIn = document.getElementById("checkIn").value;
+    let checkOut = document.getElementById("checkOut").value;
+    let price = document.getElementById("pricePerDay").value;
+
+    if(checkIn && checkOut){
+
+        let date1 = new Date(checkIn);
+        let date2 = new Date(checkOut);
+
+        let diffTime = date2 - date1;
+        let days = diffTime / (1000 * 60 * 60 * 24);
+
+        if(days > 0){
+            document.getElementById("totalPrice").value = days * price;
+        }
+    }
+}
+
+document.getElementById("checkIn").addEventListener("change", calculatePrice);
+document.getElementById("checkOut").addEventListener("change", calculatePrice);
+
+</script>
