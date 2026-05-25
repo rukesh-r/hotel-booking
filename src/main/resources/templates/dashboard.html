@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Analytics Dashboard – StayEase</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="nav-left">&#128202; StayEase Admin</div>
+    <div class="nav-right">
+        <a href="/admin/dashboard" class="nav-active">Dashboard</a>
+        <a href="/admin">Manage</a>
+        <a href="/hotelsPage">Hotels</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="dash-wrapper">
+
+    <div class="dash-header">
+        <div>
+            <h1 class="dash-title">Analytics Dashboard</h1>
+            <p class="dash-subtitle">Welcome back, <span th:text="${session.user.name}"></span> &#128075;</p>
+        </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stat-grid">
+
+        <div class="stat-card" style="--accent:#667eea;">
+            <div class="stat-icon">&#128101;</div>
+            <div class="stat-info">
+                <span class="stat-label">Total Users</span>
+                <span class="stat-value" th:text="${totalUsers}">0</span>
+            </div>
+        </div>
+
+        <div class="stat-card" style="--accent:#f5a623;">
+            <div class="stat-icon">&#127968;</div>
+            <div class="stat-info">
+                <span class="stat-label">Total Hotels</span>
+                <span class="stat-value" th:text="${totalHotels}">0</span>
+            </div>
+        </div>
+
+        <div class="stat-card" style="--accent:#20c997;">
+            <div class="stat-icon">&#128716;</div>
+            <div class="stat-info">
+                <span class="stat-label">Total Rooms</span>
+                <span class="stat-value" th:text="${totalRooms}">0</span>
+            </div>
+        </div>
+
+        <div class="stat-card" style="--accent:#e83e8c;">
+            <div class="stat-icon">&#128203;</div>
+            <div class="stat-info">
+                <span class="stat-label">Total Bookings</span>
+                <span class="stat-value" th:text="${totalBookings}">0</span>
+            </div>
+        </div>
+
+        <div class="stat-card" style="--accent:#28a745;">
+            <div class="stat-icon">&#128176;</div>
+            <div class="stat-info">
+                <span class="stat-label">Total Revenue</span>
+                <span class="stat-value">&#8377;<span th:text="${totalRevenue}">0</span></span>
+            </div>
+        </div>
+
+        <div class="stat-card" style="--accent:#17a2b8;">
+            <div class="stat-icon">&#9989;</div>
+            <div class="stat-info">
+                <span class="stat-label">Available Rooms</span>
+                <span class="stat-value" th:text="${availableRooms}">0</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="chart-grid">
+        <div class="chart-card chart-wide">
+            <div class="chart-card-header">
+                <h3>Monthly Bookings</h3>
+                <span class="chart-badge">This Year</span>
+            </div>
+            <canvas id="bookingsChart" height="100"></canvas>
+        </div>
+        <div class="chart-card">
+            <div class="chart-card-header">
+                <h3>Most Booked Hotels</h3>
+                <span class="chart-badge">All Time</span>
+            </div>
+            <canvas id="hotelsChart" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="chart-grid">
+        <div class="chart-card chart-full">
+            <div class="chart-card-header">
+                <h3>Monthly Revenue</h3>
+                <span class="chart-badge">This Year</span>
+            </div>
+            <canvas id="revenueChart" height="80"></canvas>
+        </div>
+    </div>
+
+    <div class="dash-footer-links">
+        <a href="/admin" class="btn">&#9881; Manage Hotels &amp; Rooms</a>
+        <a href="/bookingHistory" class="btn btn-outline">&#128203; All Bookings</a>
+    </div>
+
+</div>
+
+<!-- Pass data safely via hidden inputs -->
+<input type="hidden" id="d-monthLabels"   th:value="${monthLabels}">
+<input type="hidden" id="d-monthBookings" th:value="${monthlyBookings}">
+<input type="hidden" id="d-monthRevenue"  th:value="${monthlyRevenue}">
+<input type="hidden" id="d-hotelLabels"   th:value="${hotelLabels}">
+<input type="hidden" id="d-hotelBookings" th:value="${hotelBookings}">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    const monthLabels   = JSON.parse(document.getElementById('d-monthLabels').value);
+    const monthBookings = JSON.parse(document.getElementById('d-monthBookings').value);
+    const monthRevenue  = JSON.parse(document.getElementById('d-monthRevenue').value);
+    const hotelLabels   = JSON.parse(document.getElementById('d-hotelLabels').value);
+    const hotelBookings = JSON.parse(document.getElementById('d-hotelBookings').value);
+
+    new Chart(document.getElementById('bookingsChart'), {
+        type: 'bar',
+        data: {
+            labels: monthLabels,
+            datasets: [{
+                label: 'Bookings',
+                data: monthBookings,
+                backgroundColor: 'rgba(102,126,234,0.75)',
+                borderColor: '#667eea',
+                borderWidth: 2,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('hotelsChart'), {
+        type: 'doughnut',
+        data: {
+            labels: hotelLabels.length ? hotelLabels : ['No bookings yet'],
+            datasets: [{
+                data: hotelBookings.length ? hotelBookings : [1],
+                backgroundColor: ['#667eea','#f5a623','#20c997','#e83e8c','#28a745','#17a2b8','#764ba2'],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: '65%',
+            plugins: { legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } } }
+        }
+    });
+
+    new Chart(document.getElementById('revenueChart'), {
+        type: 'line',
+        data: {
+            labels: monthLabels,
+            datasets: [{
+                label: 'Revenue',
+                data: monthRevenue,
+                borderColor: '#28a745',
+                backgroundColor: 'rgba(40,167,69,0.08)',
+                borderWidth: 2.5,
+                pointBackgroundColor: '#28a745',
+                pointRadius: 5,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0,0,0,0.05)' },
+                    ticks: { callback: v => '\u20b9' + v.toLocaleString('en-IN') }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title th:text="${hotel.name} + ' – Reviews'">Hotel Reviews</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/reviews.css}">
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <div class="nav-left">Hotel Booking</div>
+    <div class="nav-right">
+        <div class="dropdown">
+            <button class="dropbtn">
+                <span th:text="${session.user.name}"></span> ▼
+            </button>
+            <div class="dropdown-content">
+                <a href="/hotelsPage">Hotels</a>
+                <a th:if="${session.user.role == 'ADMIN'}" href="/admin">Admin</a>
+                <a href="/bookingHistory">My Bookings</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="detail-wrapper">
+
+    <!-- Hotel Header -->
+    <div class="hotel-header">
+        <img th:src="${hotel.imageUrl}" class="hotel-detail-img" alt="Hotel Image">
+        <div class="hotel-header-info">
+            <h1 th:text="${hotel.name}"></h1>
+            <p class="hotel-location">📍 <span th:text="${hotel.location}"></span></p>
+            <p class="hotel-desc" th:text="${hotel.description}"></p>
+
+            <!-- Average Rating -->
+            <div class="avg-rating-box">
+                <div class="avg-stars" th:data-rating="${avgRating}">
+                    <span th:each="i : ${#numbers.sequence(1, 5)}"
+                          th:class="${i <= avgRating} ? 'star filled' : 'star'">★</span>
+                </div>
+                <span class="avg-score" th:text="${avgRating}"></span>
+                <span class="review-count">
+                    (<span th:text="${reviewCount}"></span>
+                    <span th:text="${reviewCount == 1} ? 'review' : 'reviews'"></span>)
+                </span>
+            </div>
+
+            <a class="btn" th:href="@{/roomsPage(hotelId=${hotel.id})}">View Rooms</a>
+        </div>
+    </div>
+
+    <!-- Flash Messages -->
+    <div th:if="${success}" class="success-msg"><p th:text="${success}"></p></div>
+    <div th:if="${error}" class="error-msg"><p th:text="${error}"></p></div>
+
+    <!-- Review Form -->
+    <div class="review-section">
+        <h2>Reviews</h2>
+
+        <div th:if="${!alreadyReviewed}" class="review-form-card">
+            <h3>Write a Review</h3>
+            <form action="/review/submit" method="post" id="reviewForm">
+                <input type="hidden" name="hotelId" th:value="${hotel.id}">
+
+                <!-- Star Rating Picker -->
+                <div class="star-picker" id="starPicker">
+                    <span class="star-pick" data-value="1">★</span>
+                    <span class="star-pick" data-value="2">★</span>
+                    <span class="star-pick" data-value="3">★</span>
+                    <span class="star-pick" data-value="4">★</span>
+                    <span class="star-pick" data-value="5">★</span>
+                </div>
+                <input type="hidden" name="rating" id="ratingInput" value="0">
+                <p class="rating-hint" id="ratingHint">Click to select a rating</p>
+
+                <textarea name="comment" id="commentInput" placeholder="Share your experience..." rows="4" maxlength="1000"></textarea>
+                <p class="char-count"><span id="charCount">0</span>/1000</p>
+
+                <button type="submit" class="btn submit-btn">Submit Review</button>
+            </form>
+        </div>
+
+        <div th:if="${alreadyReviewed}" class="already-reviewed-msg">
+            ✅ You have already reviewed this hotel.
+        </div>
+
+        <!-- Reviews List -->
+        <div th:if="${reviews.isEmpty()}" class="no-reviews-msg">
+            🏨 No reviews yet. Be the first to review!
+        </div>
+
+        <div class="reviews-list" th:if="${!reviews.isEmpty()}">
+            <div class="review-card" th:each="review : ${reviews}">
+                <div class="review-header">
+                    <div class="reviewer-avatar" th:text="${#strings.substring(review.user.name, 0, 1).toUpperCase()}"></div>
+                    <div class="reviewer-info">
+                        <span class="reviewer-name" th:text="${review.user.name}"></span>
+                        <span class="review-date"
+                              th:text="${#temporals.format(review.createdAt, 'dd MMM yyyy')}"></span>
+                    </div>
+                    <div class="review-stars">
+                        <span th:each="i : ${#numbers.sequence(1, 5)}"
+                              th:class="${i <= review.rating} ? 'star filled' : 'star'">★</span>
+                    </div>
+                </div>
+                <p class="review-comment" th:text="${review.comment}"></p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+// Star picker
+const stars = document.querySelectorAll('.star-pick');
+const ratingInput = document.getElementById('ratingInput');
+const ratingHint = document.getElementById('ratingHint');
+const labels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+
+stars.forEach(star => {
+    star.addEventListener('mouseover', () => highlightStars(+star.dataset.value));
+    star.addEventListener('mouseout', () => highlightStars(+ratingInput.value));
+    star.addEventListener('click', () => {
+        ratingInput.value = star.dataset.value;
+        ratingHint.textContent = labels[+star.dataset.value];
+        highlightStars(+star.dataset.value);
+    });
+});
+
+function highlightStars(val) {
+    stars.forEach(s => s.classList.toggle('active', +s.dataset.value <= val));
+}
+
+// Char counter
+const commentInput = document.getElementById('commentInput');
+const charCount = document.getElementById('charCount');
+if (commentInput) {
+    commentInput.addEventListener('input', () => charCount.textContent = commentInput.value.length);
+}
+
+// Form validation
+const reviewForm = document.getElementById('reviewForm');
+if (reviewForm) {
+    reviewForm.addEventListener('submit', e => {
+        if (+ratingInput.value === 0) {
+            e.preventDefault();
+            ratingHint.textContent = '⚠ Please select a rating!';
+            ratingHint.style.color = '#dc3545';
+            return;
+        }
+        if (!commentInput.value.trim()) {
+            e.preventDefault();
+            commentInput.style.borderColor = '#dc3545';
+            commentInput.placeholder = '⚠ Comment cannot be empty!';
+        }
+    });
+}
+
+// Auto-hide flash messages
+setTimeout(() => {
+    document.querySelectorAll('.success-msg, .error-msg').forEach(el => el.style.display = 'none');
+}, 3000);
+</script>
+
+</body>
+</html>

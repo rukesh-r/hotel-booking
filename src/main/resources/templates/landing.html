@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>StayEase – Hotel Reservation System</title>
+    <link rel="stylesheet" th:href="@{/css/landing.css}">
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="land-nav">
+    <div class="land-nav-brand">🏨 StayEase</div>
+    <div class="land-nav-links">
+        <a href="#features">Features</a>
+        <a href="#how">How It Works</a>
+        <a href="#destinations">Destinations</a>
+        <a href="/loginPage" class="nav-btn-outline">Login</a>
+        <a href="/registerPage" class="nav-btn-fill">Register</a>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#features" onclick="toggleMenu()">Features</a>
+    <a href="#how" onclick="toggleMenu()">How It Works</a>
+    <a href="#destinations" onclick="toggleMenu()">Destinations</a>
+    <a href="/loginPage">Login</a>
+    <a href="/registerPage">Register</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <span class="hero-badge">✨ Trusted by 10,000+ Travelers</span>
+        <h1>Find Your Perfect<br><span class="hero-highlight">Stay</span>, Anywhere</h1>
+        <p>Book premium hotels at the best prices. Instant confirmation, no hidden fees, and a seamless payment experience.</p>
+        <div class="hero-actions">
+            <a href="/registerPage" class="hero-btn-primary">Get Started Free</a>
+            <a href="/loginPage" class="hero-btn-secondary">Sign In →</a>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat"><span class="stat-num">500+</span><span class="stat-lbl">Hotels</span></div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat"><span class="stat-num">10K+</span><span class="stat-lbl">Bookings</span></div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat"><span class="stat-num">4.9★</span><span class="stat-lbl">Rating</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== SEARCH BAR ===== -->
+<section class="search-section">
+    <div class="search-card">
+        <h3>Where do you want to stay?</h3>
+        <form action="/loginPage" method="get" class="search-form">
+            <div class="search-field">
+                <span class="search-icon">📍</span>
+                <input type="text" placeholder="City or hotel name" name="q">
+            </div>
+            <div class="search-field">
+                <span class="search-icon">📅</span>
+                <input type="date" name="checkIn">
+            </div>
+            <div class="search-field">
+                <span class="search-icon">📅</span>
+                <input type="date" name="checkOut">
+            </div>
+            <button type="submit" class="search-btn">Search Hotels</button>
+        </form>
+    </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features-section" id="features">
+    <div class="section-header">
+        <span class="section-tag">Why StayEase</span>
+        <h2>Everything You Need for a Perfect Stay</h2>
+        <p>From browsing to booking, we've made every step effortless.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon" style="background:#eef2ff;">🏨</div>
+            <h4>Curated Hotels</h4>
+            <p>Hand-picked properties verified for quality, comfort, and value.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:#fff0f6;">💳</div>
+            <h4>Secure Payments</h4>
+            <p>Pay via UPI, Credit/Debit Card, Net Banking, or Cash on Arrival.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:#f0fff4;">⚡</div>
+            <h4>Instant Confirmation</h4>
+            <p>Get your booking confirmed instantly with a confirmation email.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:#fffbf0;">📄</div>
+            <h4>PDF Invoices</h4>
+            <p>Download professional invoices for every booking, anytime.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:#f0f9ff;">⭐</div>
+            <h4>Verified Reviews</h4>
+            <p>Read honest reviews from real guests before you book.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:#fdf4ff;">🔒</div>
+            <h4>Safe & Private</h4>
+            <p>Your data is encrypted and never shared with third parties.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how-section" id="how">
+    <div class="section-header">
+        <span class="section-tag">Simple Process</span>
+        <h2>Book in 3 Easy Steps</h2>
+        <p>From search to stay — it takes less than 2 minutes.</p>
+    </div>
+    <div class="steps-container">
+        <div class="step-card">
+            <div class="step-number">01</div>
+            <div class="step-icon">🔍</div>
+            <h4>Search Hotels</h4>
+            <p>Browse our curated list of hotels. Filter by city, price, or room type.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+            <div class="step-number">02</div>
+            <div class="step-icon">📅</div>
+            <h4>Pick Your Dates</h4>
+            <p>Select check-in and check-out dates. Total price is calculated instantly.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+            <div class="step-number">03</div>
+            <div class="step-icon">✅</div>
+            <h4>Pay & Confirm</h4>
+            <p>Choose your payment method and get instant booking confirmation.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== DESTINATIONS ===== -->
+<section class="destinations-section" id="destinations">
+    <div class="section-header">
+        <span class="section-tag">Popular Destinations</span>
+        <h2>Top Cities to Explore</h2>
+        <p>Discover amazing stays in India's most loved destinations.</p>
+    </div>
+    <div class="destinations-grid">
+        <div class="dest-card dest-large">
+            <div class="dest-overlay"></div>
+            <div class="dest-bg" style="background: linear-gradient(135deg,#667eea,#764ba2);"></div>
+            <div class="dest-info">
+                <h3>Mumbai</h3>
+                <span>120+ Hotels</span>
+            </div>
+        </div>
+        <div class="dest-card">
+            <div class="dest-overlay"></div>
+            <div class="dest-bg" style="background: linear-gradient(135deg,#f5a623,#e83e8c);"></div>
+            <div class="dest-info">
+                <h3>Delhi</h3>
+                <span>95+ Hotels</span>
+            </div>
+        </div>
+        <div class="dest-card">
+            <div class="dest-overlay"></div>
+            <div class="dest-bg" style="background: linear-gradient(135deg,#20c997,#17a2b8);"></div>
+            <div class="dest-info">
+                <h3>Goa</h3>
+                <span>80+ Hotels</span>
+            </div>
+        </div>
+        <div class="dest-card">
+            <div class="dest-overlay"></div>
+            <div class="dest-bg" style="background: linear-gradient(135deg,#e83e8c,#764ba2);"></div>
+            <div class="dest-info">
+                <h3>Jaipur</h3>
+                <span>60+ Hotels</span>
+            </div>
+        </div>
+        <div class="dest-card">
+            <div class="dest-overlay"></div>
+            <div class="dest-bg" style="background: linear-gradient(135deg,#28a745,#20c997);"></div>
+            <div class="dest-info">
+                <h3>Bangalore</h3>
+                <span>110+ Hotels</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== PAYMENT METHODS ===== -->
+<section class="payment-section">
+    <div class="section-header">
+        <span class="section-tag">Flexible Payments</span>
+        <h2>Pay Your Way</h2>
+        <p>Multiple secure payment options for your convenience.</p>
+    </div>
+    <div class="payment-methods">
+        <div class="pm-card"><span class="pm-icon">📱</span><span>UPI</span></div>
+        <div class="pm-card"><span class="pm-icon">💳</span><span>Credit Card</span></div>
+        <div class="pm-card"><span class="pm-icon">🏧</span><span>Debit Card</span></div>
+        <div class="pm-card"><span class="pm-icon">🏦</span><span>Net Banking</span></div>
+        <div class="pm-card"><span class="pm-icon">💵</span><span>Cash on Arrival</span></div>
+    </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials-section">
+    <div class="section-header">
+        <span class="section-tag">Guest Reviews</span>
+        <h2>What Our Guests Say</h2>
+    </div>
+    <div class="testimonials-grid">
+        <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <p>"Booked a room in minutes. The payment process was smooth and I got my confirmation email instantly. Highly recommend!"</p>
+            <div class="reviewer"><div class="reviewer-avatar">A</div><div><strong>Arjun Sharma</strong><span>Mumbai</span></div></div>
+        </div>
+        <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <p>"Amazing experience! The hotel selection is great and the UPI payment worked perfectly. Will definitely use again."</p>
+            <div class="reviewer"><div class="reviewer-avatar" style="background:#e83e8c;">P</div><div><strong>Priya Nair</strong><span>Bangalore</span></div></div>
+        </div>
+        <div class="testimonial-card">
+            <div class="stars">★★★★☆</div>
+            <p>"Clean UI, easy booking, and the PDF invoice feature is super useful for business travel reimbursements."</p>
+            <div class="reviewer"><div class="reviewer-avatar" style="background:#20c997;">R</div><div><strong>Rahul Verma</strong><span>Delhi</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+    <div class="cta-content">
+        <h2>Ready to Find Your Perfect Stay?</h2>
+        <p>Join thousands of happy travelers. Sign up free — no credit card required.</p>
+        <div class="cta-actions">
+            <a href="/registerPage" class="hero-btn-primary">Create Free Account</a>
+            <a href="/loginPage" class="hero-btn-secondary">Already have an account?</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="land-footer">
+    <div class="footer-top">
+        <div class="footer-brand">
+            <div class="footer-logo">🏨 StayEase</div>
+            <p>Your trusted hotel reservation platform. Book smarter, stay better.</p>
+        </div>
+        <div class="footer-links">
+            <div class="footer-col">
+                <h5>Quick Links</h5>
+                <a href="/loginPage">Login</a>
+                <a href="/registerPage">Register</a>
+                <a href="#features">Features</a>
+            </div>
+            <div class="footer-col">
+                <h5>Support</h5>
+                <a href="#">Help Center</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 StayEase. All rights reserved. Built with ❤️ using Spring Boot &amp; Thymeleaf.</p>
+    </div>
+</footer>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('mobileMenu');
+    menu.classList.toggle('open');
+}
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+});
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+    const nav = document.querySelector('.land-nav');
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Animate elements on scroll
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card, .step-card, .dest-card, .testimonial-card, .pm-card')
+    .forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

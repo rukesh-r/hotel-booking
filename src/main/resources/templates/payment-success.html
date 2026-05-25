@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment Successful – StayEase</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/payment.css}">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="nav-left">✅ StayEase – Payment Successful</div>
+    <div class="nav-right">
+        <a href="/hotelsPage">Hotels</a>
+        <a href="/bookingHistory">My Bookings</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="result-wrapper">
+    <div class="result-card success-card">
+        <div class="result-icon">✅</div>
+        <h2>Payment Successful!</h2>
+        <p>Your booking has been <strong>confirmed</strong>. Enjoy your stay!</p>
+
+        <div class="txn-details">
+            <div class="txn-row"><span>Transaction ID</span><span class="txn-id" th:text="${payment.transactionId}"></span></div>
+            <div class="txn-row"><span>Amount Paid</span><span>₹<span th:text="${payment.amount}"></span></span></div>
+            <div class="txn-row"><span>Payment Method</span><span th:text="${payment.paymentMethod.toString().replace('_', ' ')}"></span></div>
+            <div class="txn-row"><span>Hotel</span><span th:text="${payment.booking.room.hotel.name}"></span></div>
+            <div class="txn-row"><span>Room</span><span th:text="${payment.booking.room.roomType}"></span></div>
+            <div class="txn-row"><span>Check-In</span><span th:text="${payment.booking.checkIn}"></span></div>
+            <div class="txn-row"><span>Check-Out</span><span th:text="${payment.booking.checkOut}"></span></div>
+            <div class="txn-row"><span>Status</span><span class="badge-paid">PAID</span></div>
+        </div>
+
+        <div class="result-actions">
+            <a href="/bookingHistory" class="btn">📋 View My Bookings</a>
+            <a th:href="@{/invoice/download(bookingId=${payment.booking.id})}" class="btn btn-invoice">⬇ Download Invoice</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

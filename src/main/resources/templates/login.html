@@ -1,20 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
+    <title>Login – StayEase</title>
     <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
 <div class="container">
-    <h2>Login</h2>
+
+    <div class="login-brand">🏨 StayEase</div>
+    <h2>Welcome Back</h2>
+    <p class="login-sub">Sign in to your account</p>
+
+    <div th:if="${param.registered}" class="msg-success">
+        ✅ Account created successfully! Please log in.
+    </div>
+
+    <div th:if="${param.logout}" class="msg-success">
+        ✅ You have been logged out successfully.
+    </div>
+
+    <div th:if="${error}" class="msg-error" th:text="${error}"></div>
 
     <form action="/users/login" method="post">
-        <input type="email" name="email" placeholder="Enter Email">
-        <input type="password" name="password" placeholder="Enter Password">
+        <input type="email"    name="email"    placeholder="Email address" required>
+        <input type="password" name="password" placeholder="Password"      required>
         <button type="submit">Login</button>
     </form>
 
-    <a href="/registerPage">Create new account</a>
+    <a href="/registerPage">Don't have an account? Register</a>
+
 </div>
 </body>
 </html>

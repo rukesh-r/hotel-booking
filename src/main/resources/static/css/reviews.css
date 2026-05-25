@@ -1,0 +1,279 @@
+/* ===== HOTEL DETAIL WRAPPER ===== */
+.detail-wrapper {
+    width: 90%;
+    max-width: 1100px;
+    margin: 40px auto;
+}
+
+/* ===== HOTEL HEADER ===== */
+.hotel-header {
+    display: flex;
+    gap: 30px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.hotel-detail-img {
+    width: 380px;
+    min-height: 280px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.hotel-header-info {
+    padding: 30px 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hotel-header-info h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #2d2d2d;
+}
+
+.hotel-location {
+    color: #666;
+    font-size: 15px;
+    margin: 0;
+}
+
+.hotel-desc {
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ===== AVERAGE RATING BOX ===== */
+.avg-rating-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+}
+
+.avg-stars .star {
+    font-size: 24px;
+    color: #ddd;
+    transition: color 0.2s;
+}
+
+.avg-stars .star.filled {
+    color: #f5a623;
+}
+
+.avg-score {
+    font-size: 22px;
+    font-weight: bold;
+    color: #f5a623;
+}
+
+.review-count {
+    color: #888;
+    font-size: 14px;
+}
+
+/* ===== REVIEW SECTION ===== */
+.review-section {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    padding: 30px;
+}
+
+.review-section h2 {
+    margin: 0 0 20px;
+    font-size: 22px;
+    color: #2d2d2d;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 12px;
+}
+
+/* ===== REVIEW FORM CARD ===== */
+.review-form-card {
+    background: #f9f9ff;
+    border: 1px solid #e0e0f0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 30px;
+}
+
+.review-form-card h3 {
+    margin: 0 0 16px;
+    color: #444;
+}
+
+/* ===== STAR PICKER ===== */
+.star-picker {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.star-pick {
+    font-size: 36px;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.15s, transform 0.15s;
+    user-select: none;
+}
+
+.star-pick:hover,
+.star-pick.active {
+    color: #f5a623;
+    transform: scale(1.2);
+}
+
+.rating-hint {
+    font-size: 13px;
+    color: #888;
+    margin: 0 0 12px;
+}
+
+/* ===== TEXTAREA ===== */
+.review-form-card textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.review-form-card textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.char-count {
+    text-align: right;
+    font-size: 12px;
+    color: #aaa;
+    margin: 4px 0 12px;
+}
+
+.submit-btn {
+    margin-top: 0;
+    padding: 10px 28px;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+}
+
+/* ===== MESSAGES ===== */
+.already-reviewed-msg {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    font-weight: 500;
+}
+
+.no-reviews-msg {
+    text-align: center;
+    color: #999;
+    padding: 40px 0;
+    font-size: 16px;
+}
+
+/* ===== REVIEW CARDS ===== */
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.review-card {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 18px 20px;
+    transition: box-shadow 0.25s, transform 0.25s;
+    background: #fff;
+}
+
+.review-card:hover {
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
+    transform: translateY(-2px);
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+
+.reviewer-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.reviewer-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.reviewer-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 15px;
+}
+
+.review-date {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.review-stars .star {
+    font-size: 18px;
+    color: #ddd;
+}
+
+.review-stars .star.filled {
+    color: #f5a623;
+}
+
+.review-comment {
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+    font-size: 14px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .hotel-header {
+        flex-direction: column;
+    }
+
+    .hotel-detail-img {
+        width: 100%;
+        min-height: 220px;
+    }
+
+    .hotel-header-info {
+        padding: 20px;
+    }
+
+    .review-section {
+        padding: 20px;
+    }
+}

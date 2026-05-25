@@ -34,19 +34,11 @@ public class HotelController {
 
         model.addAttribute("hotels", hotels);
 
-        return "hotels"; // 🔥 VERY IMPORTANT
+        return "hotels";
     }
 
     @PostMapping
     public Hotel addHotel(@RequestBody Hotel hotel){
         return service.saveHotel(hotel);
-    }
-
-    @GetMapping("/hotelsPage")
-    public String hotelsPage(Model model){
-
-        model.addAttribute("hotels", service.getAllHotels());
-
-        return "hotels";
     }
 }

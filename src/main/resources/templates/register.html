@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Register</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Register – StayEase</title>
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
-
 <div class="container">
-    <h2>Register</h2>
+
+    <div class="login-brand">🏨 StayEase</div>
+    <h2>Create Account</h2>
+    <p class="login-sub">Join StayEase today</p>
+
+    <div th:if="${error}" class="msg-error" th:text="${error}"></div>
 
     <form action="/users/register" method="post">
-        <input type="text" name="name" placeholder="Full Name">
-        <input type="email" name="email" placeholder="Enter Email">
-        <input type="password" name="password" placeholder="Enter Password">
-        <button type="submit">Register</button>
+        <input type="text"     name="name"     placeholder="Full Name"      required>
+        <input type="email"    name="email"    placeholder="Email address"  required>
+        <input type="password" name="password" placeholder="Password (min 6 chars)" required minlength="6">
+        <button type="submit">Create Account</button>
     </form>
 
-    <a href="/loginPage">Already have account?</a>
-</div>
+    <a href="/loginPage">Already have an account? Login</a>
 
+</div>
 </body>
 </html>

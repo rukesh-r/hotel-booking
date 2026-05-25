@@ -6,42 +6,36 @@
 </head>
 
 <body>
+
 <div class="navbar">
-
-    <div class="nav-left">
-        My Booking
-    </div>
-
+    <div class="nav-left">My Bookings</div>
     <div class="nav-right">
-
         <div class="dropdown">
-
             <button class="dropbtn">
                 <span th:text="${session.user.name}"></span> ▼
             </button>
-
             <div class="dropdown-content">
                 <a href="/hotelsPage">Hotels</a>
                 <a href="/bookingHistory">My Bookings</a>
                 <a href="/logout">Logout</a>
             </div>
-
         </div>
-
     </div>
-
 </div>
-<div class="table-container">
+
 <div th:if="${success}" class="success-msg">
     <p th:text="${success}"></p>
+</div>
+
 <div class="booking-wrapper">
 
     <h2>My Bookings</h2>
-	<div th:if="${#lists.isEmpty(bookings)}" class="error-msg">
-    	No bookings found
-	</div>
-    <table class="booking-table" th:if="${not #lists.isEmpty(bookings)}">
 
+    <div th:if="${#lists.isEmpty(bookings)}" class="error-msg">
+        No bookings found.
+    </div>
+
+    <table class="booking-table" th:if="${not #lists.isEmpty(bookings)}">
         <tr>
             <th>ID</th>
             <th>Hotel</th>
@@ -49,31 +43,44 @@
             <th>Check In</th>
             <th>Check Out</th>
             <th>Total Price</th>
-            <th>Action</th>
+            <th>Status</th>
+            <th>Actions</th>
         </tr>
-
         <tr th:each="b : ${bookings}">
-
             <td th:text="${b.id}"></td>
             <td th:text="${b.room.hotel.name}"></td>
             <td th:text="${b.room != null ? b.room.roomType : 'N/A'}"></td>
             <td th:text="${b.checkIn}"></td>
             <td th:text="${b.checkOut}"></td>
-            <td th:text="${b.totalPrice}"></td>
-
+            <td>₹<span th:text="${b.totalPrice}"></span></td>
             <td>
-                <a th:href="@{/booking/cancelBooking(id=${b.id})}"
-   				class="btn"
-   				onclick="return confirm('Are you sure you want to cancel this booking?')">
-    			Cancel
-				</a>
+                <span th:if="${b.status != null and b.status.name() == 'CONFIRMED'}" class="badge-paid">✅ Confirmed</span>
+                <span th:if="${b.status != null and b.status.name() == 'PENDING'}" class="badge-pending">⏳ Pending</span>
+                <span th:if="${b.status != null and b.status.name() == 'CANCELLED'}" class="badge-failed">❌ Cancelled</span>
+                <span th:if="${b.status == null}" class="badge-pending">⏳ Pending</span>
             </td>
-
+            <td style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+                <a th:href="@{/invoice/download(bookingId=${b.id})}"
+                   class="btn btn-invoice">
+                    ⬇ Invoice
+                </a>
+                <a th:href="@{/booking/cancelBooking(id=${b.id})}"
+                   class="btn btn-cancel"
+                   onclick="return confirm('Are you sure you want to cancel this booking?')">
+                    ✕ Cancel
+                </a>
+            </td>
         </tr>
-
     </table>
 
 </div>
 
 </body>
 </html>
+
+<script>
+setTimeout(function(){
+    let msg = document.querySelector(".success-msg");
+    if(msg) msg.style.display = "none";
+}, 3000);
+</script>

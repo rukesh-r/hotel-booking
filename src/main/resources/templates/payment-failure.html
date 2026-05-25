@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment Failed – StayEase</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/payment.css}">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="nav-left">❌ StayEase – Payment Failed</div>
+    <div class="nav-right">
+        <a href="/hotelsPage">Hotels</a>
+        <a href="/bookingHistory">My Bookings</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="result-wrapper">
+    <div class="result-card failure-card">
+        <div class="result-icon">❌</div>
+        <h2>Payment Failed</h2>
+        <p>Unfortunately your payment could not be processed. Please try again.</p>
+
+        <div class="txn-details">
+            <div class="txn-row"><span>Transaction ID</span><span class="txn-id" th:text="${payment.transactionId}"></span></div>
+            <div class="txn-row"><span>Amount</span><span>₹<span th:text="${payment.amount}"></span></span></div>
+            <div class="txn-row"><span>Payment Method</span><span th:text="${payment.paymentMethod.toString().replace('_', ' ')}"></span></div>
+            <div class="txn-row"><span>Status</span><span class="badge-failed">FAILED</span></div>
+        </div>
+
+        <div class="result-actions">
+            <a th:href="@{/hotelsPage}" class="btn">🏨 Browse Hotels</a>
+            <a href="/bookingHistory" class="btn btn-cancel">📋 My Bookings</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

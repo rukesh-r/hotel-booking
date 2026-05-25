@@ -10,9 +10,7 @@ public class AuthController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session){
-
-        session.invalidate();   // destroy session
-
-        return "redirect:/loginPage";
+        session.invalidate();
+        return "redirect:/loginPage?logout=true";
     }
 }

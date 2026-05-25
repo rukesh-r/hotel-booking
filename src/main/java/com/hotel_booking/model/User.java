@@ -15,6 +15,7 @@ public class User {
 		this.role = role;
 	}
 	private String name;
+    @Column(unique = true)
     private String email;
     private String password;
 	public int getId() {

@@ -24,68 +24,45 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/booking")
 public class BookingController {
 
-	@Autowired
-	private RoomService roomService;
-    @Autowired
-    private BookingService service;
+    @Autowired private RoomService roomService;
+    @Autowired private BookingService service;
 
     @PostMapping
-    public String bookRoom(Booking booking,
-                           HttpSession session,
-                           RedirectAttributes redirectAttributes){
-
+    public String bookRoom(Booking booking, HttpSession session, RedirectAttributes redirectAttributes) {
         User user = (User) session.getAttribute("user");
+        if (user == null) return "redirect:/loginPage";
 
-        if(user == null){
-            return "redirect:/loginPage";
-        }
-
-        // 🔥 VERY IMPORTANT FIX
         booking.setUser(user);
-
         Booking result = service.saveBooking(booking);
 
-        if(result == null){
-            redirectAttributes.addFlashAttribute("error",
-                    "No rooms available!");
+        if (result == null) {
+            redirectAttributes.addFlashAttribute("error", "No rooms available!");
             return "redirect:/roomsPage";
         }
 
-        redirectAttributes.addFlashAttribute("success",
-                "Booking confirmed successfully!");
-
-        return "redirect:/bookingHistory";
+        // Redirect to payment page instead of confirming immediately
+        return "redirect:/payment/" + result.getId();
     }
+
     @GetMapping("/user/{id}")
-    public List<Booking> getBookings(@PathVariable int id){
+    public List<Booking> getBookings(@PathVariable int id) {
         return service.getUserBookings(id);
     }
+
     @GetMapping("/cancelBooking")
-    public String cancelBooking(@RequestParam int id,
-                                RedirectAttributes redirectAttributes){
-
+    public String cancelBooking(@RequestParam int id, RedirectAttributes redirectAttributes) {
         service.cancelBooking(id);
-
-        redirectAttributes.addFlashAttribute("success",
-                "Booking cancelled successfully!");
-
+        redirectAttributes.addFlashAttribute("success", "Booking cancelled successfully!");
         return "redirect:/bookingHistory";
     }
+
     @GetMapping("/paymentPage")
-    public String paymentPage(@RequestParam int roomId,
-                              HttpSession session,
-                              Model model){
-
+    public String paymentPage(@RequestParam int roomId, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
-
-        if(user == null){
-            return "redirect:/loginPage";
-        }
+        if (user == null) return "redirect:/loginPage";
 
         Room room = roomService.getRoomById(roomId);
-
         model.addAttribute("room", room);
-
-        return "payment";
+        return "booking-form";
     }
 }

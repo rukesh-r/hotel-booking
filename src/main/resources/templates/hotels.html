@@ -34,7 +34,7 @@
 	    </div>
 
 	</div>
-</div>
+
 <div th:if="${success}" class="success-msg">
     <p th:text="${success}"></p>
 </div>
@@ -62,10 +62,16 @@
 
             <p th:text="${hotel.description}"></p>
 
-            <a class="btn"
-               th:href="@{/roomsPage(hotelId=${hotel.id})}">
-               View Rooms
-            </a>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+                <a class="btn"
+                   th:href="@{/roomsPage(hotelId=${hotel.id})}">
+                   View Rooms
+                </a>
+                <a class="btn btn-outline"
+                   th:href="@{/hotelDetail(hotelId=${hotel.id})}">
+                   ⭐ Reviews
+                </a>
+            </div>
 
         </div>
 

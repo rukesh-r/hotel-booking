@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Book Room – StayEase</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/payment.css}">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="nav-left">🏨 StayEase – Book Room</div>
+    <div class="nav-right">
+        <a href="/hotelsPage">Hotels</a>
+        <a href="/bookingHistory">My Bookings</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="pay-wrapper">
+
+    <!-- Room Summary -->
+    <div class="pay-summary">
+        <h3>🛏 Room Details</h3>
+        <div class="summary-row"><span>Hotel</span><span th:text="${room.hotel.name}"></span></div>
+        <div class="summary-row"><span>Room Type</span><span th:text="${room.roomType}"></span></div>
+        <div class="summary-row"><span>Price / Night</span><span>₹<span th:text="${room.price}"></span></span></div>
+        <div class="summary-row"><span>Available</span><span th:text="${room.availableRooms}"></span></div>
+        <div class="secure-badge">🔒 Free cancellation before check-in</div>
+    </div>
+
+    <!-- Date Selection Form -->
+    <div class="pay-form-box">
+        <h3>Select Your Dates</h3>
+
+        <form action="/booking" method="post" id="bookingForm">
+            <input type="hidden" name="room.id" th:value="${room.id}">
+            <input type="hidden" name="user.id" th:value="${session.user.id}">
+            <input type="hidden" id="pricePerDay" th:value="${room.price}">
+
+            <div class="method-section">
+                <label>Check-In Date</label>
+                <input type="date" id="checkIn" name="checkIn" class="pay-input" required>
+
+                <label>Check-Out Date</label>
+                <input type="date" id="checkOut" name="checkOut" class="pay-input" required>
+
+                <label>Total Price</label>
+                <input type="number" id="totalPrice" name="totalPrice" class="pay-input" readonly
+                       placeholder="Select dates to calculate">
+
+                <p class="hint" id="daysText"></p>
+            </div>
+
+            <button type="submit" class="pay-btn" id="bookBtn" disabled>
+                Proceed to Payment
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('checkIn').min = today;
+document.getElementById('checkOut').min = today;
+
+function calculatePrice() {
+    const checkIn  = document.getElementById('checkIn').value;
+    const checkOut = document.getElementById('checkOut').value;
+    const price    = parseFloat(document.getElementById('pricePerDay').value);
+
+    if (checkIn && checkOut) {
+        const days = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
+        if (days > 0) {
+            document.getElementById('totalPrice').value = (days * price).toFixed(2);
+            document.getElementById('daysText').textContent = 'Total: ' + days + ' night(s)';
+            document.getElementById('bookBtn').disabled = false;
+        } else {
+            document.getElementById('totalPrice').value = '';
+            document.getElementById('daysText').textContent = 'Check-out must be after check-in';
+            document.getElementById('bookBtn').disabled = true;
+        }
+    }
+}
+
+document.getElementById('checkIn').addEventListener('change', calculatePrice);
+document.getElementById('checkOut').addEventListener('change', calculatePrice);
+</script>
+
+</body>
+</html>
